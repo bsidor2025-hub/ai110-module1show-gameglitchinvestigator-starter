@@ -50,6 +50,7 @@ A: Yes. Claude pointed out why the original tests missed the bugs and wrote regr
 ## 4. What did you learn about Streamlit and state?
 
 - How would you explain Streamlit "reruns" and session state to a friend who has never used Streamlit?
+A: Every time you click a button or change a widget, Streamlit reruns the whole Python script from top to bottom, like refreshing the page, and all normal variables are thrown away and recreated. Session state (`st.session_state`) is a small dictionary that survives those reruns, so it's where the game keeps things that must not reset, like the secret number, attempts and score. In this project the game lives in one `st.session_state.game` entry, and the code only creates a new game if one doesn't exist yet or when New Game is clicked. That's why the secret stays fixed while you guess. Also, the script runs top to bottom, so anything drawn before a click is processed shows old values, which was the cause of the stale "Attempts left" banner.
 
 ---
 
@@ -57,5 +58,8 @@ A: Yes. Claude pointed out why the original tests missed the bugs and wrote regr
 
 - What is one habit or strategy from this project that you want to reuse in future labs or projects?
   - This could be a testing habit, a prompting strategy, or a way you used Git.
+A: Writing a regression test for every bug I fix. The original tests passed even though the game was broken, but a test for each bug (hints across many attempts, attempts left at zero after a loss, New Game after a loss) would catch it if it came back. I also want to keep logic separate from UI code, because that is what made the tests easy to write.
 - What is one thing you would do differently next time you work with AI on a coding task?
+A: I would read the code and run it myself before accepting an AI explanation, instead of mostly checking afterward. I would also ask for a plan and a list of what could be wrong before any code changes, as I did for the refactor, so I decide the scope first.
 - In one or two sentences, describe how this project changed the way you think about AI generated code.
+A: AI-generated code can look like it works while hiding bugs, so it needs the same testing and review as code I wrote myself. The game ran fine at first, and the bugs only showed up when I played it carefully.
